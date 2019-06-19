@@ -7,6 +7,9 @@ const ENCODING = 'utf8';
 
 const matrix_effect_breath = 'matrix_effect_breath';
 const matrix_effect_starlight = 'matrix_effect_starlight';
+const matrix_effect_custom = 'matrix_effect_custom';
+const matrix_effect_none = 'matrix_effect_none';
+const matrix_effect_reactive = 'matrix_effect_reactive';
 
 export type RGB = [number, number, number];
 
@@ -86,7 +89,7 @@ export class Keyboard {
    * @param firstColor if set, use this colour in single-color mode
    * @param secondColor if set, use this colour in dual-color mode
    */
-  public setStarlightEffect(speed: number, firstColor?: RGB, secondColor?: RGB) {
+  public setMatrixEffectStarlight(speed: number, firstColor?: RGB, secondColor?: RGB) {
     validateByte(speed, 'speed');
     if (firstColor) {
       validateRGB(firstColor);
@@ -99,6 +102,27 @@ export class Keyboard {
     } else {
       return this.writeBytes(matrix_effect_starlight, [speed]);
     }
+  }
+
+  /**
+   * @param speed between 1 and 3, 1 = short, 3 = long
+   * @param color an RGB value
+   */
+  public setMatrixEffectReactive(speed: number, color: RGB) {
+    if (speed < 1 || speed > 3) throw new Error('invalid speed');
+    validateRGB(color);
+    return this.writeBytes(matrix_effect_reactive, [speed, ...color]);
+  }
+
+  /**
+   * This command draws the current frame stored in the keyboards memory.
+   */
+  public writeCustomFrame() {
+    return this.writeBytes(matrix_effect_custom, [0x1]);
+  }
+
+  public setMatrixEffectNone() {
+    return this.writeBytes(matrix_effect_none, [0x1]);
   }
 
   private writeBytes(file: string, bytes: number[]) {

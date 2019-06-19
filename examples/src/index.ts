@@ -36,14 +36,26 @@ const wait = (millis: number) => new Promise(resolve => setTimeout(resolve, mill
   // console.log('Setting starlight effect, speed 255');
   // kbd.setStarlightEffect(255);
 
+  // await wait(5000);
+
+  // console.log('Setting starlight effect, in red, speed 50');
+  // kbd.setStarlightEffect(50, [255, 0, 0]);
+
+  // await wait(5000);
+
+  // console.log('Setting starlight effect, dual mode, speed 50');
+  // kbd.setStarlightEffect(50, [0, 200, 255], [150, 0, 255]);
+
+  // await wait(5000);
+
+  console.log('Setting reactive effect, yellow, short');
+  kbd.setMatrixEffectReactive(1, [255, 255, 0]);
+
   await wait(5000);
 
-  console.log('Setting starlight effect, in red, speed 50');
-  kbd.setStarlightEffect(50, [255, 0, 0]);
+  console.log('Setting reactive effect, orange, long');
+  kbd.setMatrixEffectReactive(3, [255, 155, 0]);
 
   await wait(5000);
-
-  console.log('Setting starlight effect, dual mode, speed 50');
-  kbd.setStarlightEffect(50, [0, 200, 255], [150, 0, 255]);
 
 })();
