@@ -8,6 +8,9 @@ const wait = (millis: number) => new Promise(resolve => setTimeout(resolve, mill
   if (kbds.length === 0) return;
   const kbd = kbds[0];
 
+  console.log('serial:', await kbd.getSerialNumber());
+  console.log('firmware:', await kbd.getFirmwareVersion());
+
   // console.log('Setting to random breathing effect');
   // kbd.setMatrixEffectBreath();
 

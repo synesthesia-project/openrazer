@@ -5,11 +5,19 @@ import {promisify} from 'util';
 const KEYBOARDS_PATH = '/sys/bus/hid/drivers/razerkbd/';
 const ENCODING = 'utf8';
 
+const device_type = 'device_type';
+const device_serial = 'device_serial';
+const firmware_version = 'firmware_version';
 const matrix_effect_breath = 'matrix_effect_breath';
 const matrix_effect_starlight = 'matrix_effect_starlight';
 const matrix_effect_custom = 'matrix_effect_custom';
 const matrix_effect_none = 'matrix_effect_none';
 const matrix_effect_reactive = 'matrix_effect_reactive';
+const matrix_effect_spectrum = 'matrix_effect_spectrum';
+const matrix_effect_pulsate = 'matrix_effect_pulsate';
+const matrix_effect_static = 'matrix_effect_static';
+const matrix_effect_wave = 'matrix_effect_wave';
+const matrix_brightness = 'matrix_brightness';
 
 export type RGB = [number, number, number];
 
@@ -39,7 +47,7 @@ export function getKeyboards(): Promise<Keyboard[]> {
     devices.map(async deviceId => {
       // Get Device Type
       const devicePath = path.join(KEYBOARDS_PATH, deviceId);
-      const deviceType = await readFile(path.join(devicePath, 'device_type'), ENCODING).catch(() => null);
+      const deviceType = await readFile(path.join(devicePath, device_type), ENCODING).catch(() => null);
       return deviceType ? new Keyboard(devicePath, deviceType.trim()) : null;
     })
   ));
@@ -125,7 +133,41 @@ export class Keyboard {
     return this.writeBytes(matrix_effect_none, [0x1]);
   }
 
+  public setMatrixEffectSpectrum() {
+    return this.writeBytes(matrix_effect_spectrum, [0x1]);
+  }
+
+  /**
+   * This is only available for the Razer BlackWidow Ultimate 2013,
+   * and for other non-Chroma/non-Ultimate devices.
+   * This mode just fades in and out.
+   */
+  public setMatrixEffectPulsate() {
+    return this.writeBytes(matrix_effect_pulsate, [0x1]);
+  }
+
+  public setMatrixEffectStatic(color: RGB) {
+    return this.writeBytes(matrix_effect_static, [...color]);
+  }
+
+  public setMatrixEffectWave(direction: 'left' | 'right') {
+    return this.writeBytes(matrix_effect_wave, [direction === 'left' ? 1 : 2]);
+  }
+
+  public setMatrixBrightness(brightness: number) {
+    validateByte(brightness, 'brightness');
+    return this.writeBytes(matrix_brightness, [brightness]);
+  }
+
   private writeBytes(file: string, bytes: number[]) {
     return writeFile(path.join(this.devicePath, file), Buffer.from(bytes));
+  }
+
+  public getSerialNumber() {
+    return readFile(path.join(this.devicePath, device_serial), ENCODING).then(s => s.trim());
+  }
+
+  public getFirmwareVersion() {
+    return readFile(path.join(this.devicePath, firmware_version), ENCODING).then(s => s.trim());
   }
 }
