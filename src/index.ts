@@ -156,7 +156,7 @@ export class Keyboard {
 
   public setMatrixBrightness(brightness: number) {
     validateByte(brightness, 'brightness');
-    return this.writeBytes(matrix_brightness, [brightness]);
+    return writeFile(path.join(this.devicePath, matrix_brightness), brightness.toString());
   }
 
   private writeBytes(file: string, bytes: number[]) {
