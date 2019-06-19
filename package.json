@@ -1,0 +1,8 @@
+{
+  "name": "openrazer",
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": "https://github.com/synesthesia-project/openrazer",
+  "author": "Sam Lanning <sam@samlanning.com>",
+  "license": "MIT"
+}
