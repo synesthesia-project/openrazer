@@ -1,6 +1,8 @@
 {
   "name": "openrazer",
   "version": "0.0.1",
+  "description": "Node.js library for interacting with the openrazer linux driver to control Razer peripherals",
+  "keywords": ["razer", "razer-devices", "linux", "razer-peripherals", "openrazer", "lighting"],
   "main": "index.js",
   "repository": "https://github.com/synesthesia-project/openrazer",
   "author": "Sam Lanning <sam@samlanning.com>",
