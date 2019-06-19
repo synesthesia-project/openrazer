@@ -5,6 +5,9 @@ import {promisify} from 'util';
 const KEYBOARDS_PATH = '/sys/bus/hid/drivers/razerkbd/';
 const ENCODING = 'utf8';
 
+const matrix_effect_breath = 'matrix_effect_breath';
+const matrix_effect_starlight = 'matrix_effect_starlight';
+
 export type RGB = [number, number, number];
 
 const readdir = promisify(fs.readdir);
@@ -13,6 +16,11 @@ const writeFile = promisify(fs.writeFile);
 
 function filterNonNull<T>(values: (T | null)[]): T[] {
   return values.filter(v => v !== null) as T[];
+}
+
+function validateByte(byte: number, name: string) {
+  if (byte < 0 || byte > 255)
+    throw new Error(`invalid ${name}`);
 }
 
 function validateRGB(value: RGB) {
@@ -64,12 +72,32 @@ export class Keyboard {
       validateRGB(firstColor);
       if (secondColor) {
         validateRGB(secondColor);
-        return this.writeBytes('matrix_effect_breath', [...firstColor, ...secondColor]);
+        return this.writeBytes(matrix_effect_breath, [...firstColor, ...secondColor]);
       } else {
-        return this.writeBytes('matrix_effect_breath', [...firstColor]);
+        return this.writeBytes(matrix_effect_breath, [...firstColor]);
       }
     } else {
-      return this.writeBytes('matrix_effect_breath', [0x1]);
+      return this.writeBytes(matrix_effect_breath, [0x1]);
+    }
+  }
+
+  /**
+   * @param speed between 0 and 255, 0 = slow, 255 = fast
+   * @param firstColor if set, use this colour in single-color mode
+   * @param secondColor if set, use this colour in dual-color mode
+   */
+  public setStarlightEffect(speed: number, firstColor?: RGB, secondColor?: RGB) {
+    validateByte(speed, 'speed');
+    if (firstColor) {
+      validateRGB(firstColor);
+      if (secondColor) {
+        validateRGB(secondColor);
+        return this.writeBytes(matrix_effect_starlight, [speed, ...firstColor, ...secondColor]);
+      } else {
+        return this.writeBytes(matrix_effect_starlight, [speed, ...firstColor]);
+      }
+    } else {
+      return this.writeBytes(matrix_effect_starlight, [speed]);
     }
   }
 
