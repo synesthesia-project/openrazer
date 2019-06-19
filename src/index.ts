@@ -5,13 +5,22 @@ import {promisify} from 'util';
 const KEYBOARDS_PATH = '/sys/bus/hid/drivers/razerkbd/';
 const ENCODING = 'utf8';
 
-const DEVICE_TYPE = 'device_type';
+export type RGB = [number, number, number];
 
 const readdir = promisify(fs.readdir);
 const readFile = promisify(fs.readFile);
+const writeFile = promisify(fs.writeFile);
 
 function filterNonNull<T>(values: (T | null)[]): T[] {
   return values.filter(v => v !== null) as T[];
+}
+
+function validateRGB(value: RGB) {
+  if (value.length !== 3) throw new Error('invalid RGB Value');
+  for (let i = 0; i <= 3; i++) {
+    if (value[i] < 0 || value[i] > 255)
+      throw new Error('invalid RGB Value');
+  }
 }
 
 export function getKeyboards(): Promise<Keyboard[]> {
@@ -19,7 +28,7 @@ export function getKeyboards(): Promise<Keyboard[]> {
     devices.map(async deviceId => {
       // Get Device Type
       const devicePath = path.join(KEYBOARDS_PATH, deviceId);
-      const deviceType = await readFile(path.join(devicePath, DEVICE_TYPE), ENCODING).catch(() => null);
+      const deviceType = await readFile(path.join(devicePath, 'device_type'), ENCODING).catch(() => null);
       return deviceType ? new Keyboard(devicePath, deviceType.trim()) : null;
     })
   ));
@@ -37,5 +46,34 @@ export class Keyboard {
   public constructor(devicePath: string, deviceType: string) {
     this.devicePath = devicePath;
     this.deviceType = deviceType;
+  }
+
+  /**
+   * Return the path of the device folder
+   */
+  public getDevicePath() {
+    return this.devicePath;
+  }
+
+  public getDeviceType() {
+    return this.deviceType;
+  }
+
+  public setMatrixEffectBreath(firstColor?: RGB, secondColor?: RGB) {
+    if (firstColor) {
+      validateRGB(firstColor);
+      if (secondColor) {
+        validateRGB(secondColor);
+        return this.writeBytes('matrix_effect_breath', [...firstColor, ...secondColor]);
+      } else {
+        return this.writeBytes('matrix_effect_breath', [...firstColor]);
+      }
+    } else {
+      return this.writeBytes('matrix_effect_breath', [0x1]);
+    }
+  }
+
+  private writeBytes(file: string, bytes: number[]) {
+    return writeFile(path.join(this.devicePath, file), Buffer.from(bytes));
   }
 }
