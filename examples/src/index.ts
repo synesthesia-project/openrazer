@@ -1,3 +1,7 @@
 import * as openrazer from 'openrazer';
 
-openrazer.getKeyboards();
+(async () => {
+  const kbds = await openrazer.getKeyboards();
+  console.log(kbds);
+
+})();
