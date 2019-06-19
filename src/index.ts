@@ -1,1 +1,4 @@
-console.log('hello world');
+
+export function getKeyboards() {
+  console.log('hello world');
+}

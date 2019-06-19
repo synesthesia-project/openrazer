@@ -20,6 +20,7 @@
     "typescript": "^3.5.2"
   },
   "scripts": {
-    "build": "gulp"
+    "build": "gulp",
+    "build-and-test": "gulp; yarn --cwd examples run test"
   }
 }
