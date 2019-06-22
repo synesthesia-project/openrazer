@@ -20,6 +20,7 @@ const matrix_effect_pulsate = 'matrix_effect_pulsate';
 const matrix_effect_static = 'matrix_effect_static';
 const matrix_effect_wave = 'matrix_effect_wave';
 const matrix_brightness = 'matrix_brightness';
+const matrix_custom_frame = 'matrix_custom_frame';
 
 export type RGB = [number, number, number];
 
@@ -126,6 +127,27 @@ export class Keyboard {
     if (speed < 1 || speed > 3) throw new Error('invalid speed');
     validateRGB(color);
     return this.writeBytes(matrix_effect_reactive, [speed, ...color]);
+  }
+
+  /**
+   * Weire rows of colors to the custom frame buffer
+   *
+   * @param rows An array of row objects. For each row specify index, start and colors.
+   * @param row between 0-5, the row index
+   * @param start between 0-21, the first column you want to write a color to
+   * @param colors the colors you wish to write, providing no more than (22-start) values
+   */
+  public writeCustomFrameRows(rows: {index: number, start: number, colors: RGB[]}[]) {
+    const bytes: number[] = [];
+    rows.map(({ index, start, colors}) => {
+      if (index < 0 || index > 5) throw new Error(`invalid row index: ${index}`);
+      if (start < 0 || start > 21) throw new Error(`invalid start index: ${start}`);
+      const end = start + colors.length - 1;
+      if (end > 21) throw new Error('too many colors provided');
+      bytes.push(index, start, end);
+      for (const color of colors) bytes.push(...color);
+    });
+    return this.writeBytes(matrix_custom_frame, bytes);
   }
 
   /**
