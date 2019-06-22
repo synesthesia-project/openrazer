@@ -20,7 +20,13 @@
     "typescript": "^3.5.2"
   },
   "scripts": {
-    "build": "gulp",
+    "clean": "gulp clean; yarn --cwd examples run clean",
+    "build": "gulp; yarn --cwd examples run build",
     "build-and-test": "gulp; yarn --cwd examples run test"
-  }
+  },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "README.md"
+  ]
 }
