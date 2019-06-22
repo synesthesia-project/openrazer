@@ -12,8 +12,9 @@
     "typescript": "^3.5.2"
   },
   "scripts": {
+    "build": "gulp",
     "auto-install": "yarn install; git checkout node_modules",
-    "test": "gulp; node build"
+    "test": "node build"
   },
   "dependencies": {
     "openrazer": "^0.0.1"
