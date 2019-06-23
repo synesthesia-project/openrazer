@@ -177,3 +177,5 @@ export class Keyboard {
     return readFile(path.join(this.devicePath, firmware_version), ENCODING).then(s => s.trim());
   }
 }
+
+export {KeyboardPixelMap};
