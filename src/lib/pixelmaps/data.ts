@@ -1,5 +1,8 @@
 type KeyboardPixelMapRow = {
-  y?: number; // TODO
+  /**
+   * The svg y positions for (most) keys in this row
+   */
+  svgY: number;
   keys: {
     i: number;
   }[];
@@ -15,6 +18,7 @@ export const KEYBOARD_PIXEL_MAPS: { [id: string]: KeyboardPixelMap } = {
     svg: 'ornata-chroma.svg',
     rows: [
       {
+        svgY: 10,
         keys: [
           { i: 1  }, // ESC
           { i: 3  }, // F1
@@ -35,6 +39,7 @@ export const KEYBOARD_PIXEL_MAPS: { [id: string]: KeyboardPixelMap } = {
         ]
       },
       {
+        svgY: 70.910522,
         keys: [
           { i: 1  }, // `
           { i: 2  }, // 1
@@ -60,6 +65,7 @@ export const KEYBOARD_PIXEL_MAPS: { [id: string]: KeyboardPixelMap } = {
         ]
       },
       {
+        svgY: 117.00507,
         keys: [
           { i: 1  }, // tab
           { i: 2  }, // q
@@ -85,6 +91,7 @@ export const KEYBOARD_PIXEL_MAPS: { [id: string]: KeyboardPixelMap } = {
         ]
       },
       {
+        svgY: 163.09955,
         keys: [
           { i: 1  }, // caps lock
           { i: 2  }, // a
@@ -105,6 +112,7 @@ export const KEYBOARD_PIXEL_MAPS: { [id: string]: KeyboardPixelMap } = {
         ]
       },
       {
+        svgY: 209.19406,
         keys: [
           { i: 1  }, // shift
           { i: 3  }, // z
@@ -126,6 +134,7 @@ export const KEYBOARD_PIXEL_MAPS: { [id: string]: KeyboardPixelMap } = {
         ]
       },
       {
+        svgY: 255.28857,
         keys: [
           { i: 1  }, // ctrl
           { i: 2  }, // windows

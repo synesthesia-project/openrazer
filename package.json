@@ -1,8 +1,15 @@
 {
   "name": "openrazer",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Node.js library for interacting with the openrazer linux driver to control Razer peripherals",
-  "keywords": ["razer", "razer-devices", "linux", "razer-peripherals", "openrazer", "lighting"],
+  "keywords": [
+    "razer",
+    "razer-devices",
+    "linux",
+    "razer-peripherals",
+    "openrazer",
+    "lighting"
+  ],
   "license": "MIT",
   "main": "index.js",
   "types": "index.d.js",
@@ -29,5 +36,8 @@
     "index.d.ts",
     "lib/**/*",
     "README.md"
-  ]
+  ],
+  "dependencies": {
+    "svgson": "^3.1.0"
+  }
 }

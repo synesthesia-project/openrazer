@@ -2,6 +2,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import {promisify} from 'util';
 
+import { KeyboardPixelMap, getPixelMap } from './lib/pixelmaps';
+
 const KEYBOARDS_PATH = '/sys/bus/hid/drivers/razerkbd/';
 const ENCODING = 'utf8';
 
@@ -76,6 +78,10 @@ export class Keyboard {
 
   public getDeviceType() {
     return this.deviceType;
+  }
+
+  public getPixelMap(): Promise<KeyboardPixelMap | null> {
+    return getPixelMap(this.deviceType);
   }
 
   public setMatrixEffectBreath(firstColor?: RGB, secondColor?: RGB) {
