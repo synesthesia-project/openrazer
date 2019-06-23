@@ -35,6 +35,7 @@
     "index.js",
     "index.d.ts",
     "lib/**/*",
+    "pixelmaps/**/*",
     "README.md"
   ],
   "dependencies": {
