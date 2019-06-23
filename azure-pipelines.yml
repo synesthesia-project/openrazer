@@ -17,5 +17,9 @@ steps:
   displayName: 'run build'
 
 - script: |
+    yarn run test
+  displayName: 'run unit tests'
+
+- script: |
     yarn run clean
   displayName: 'run clean'

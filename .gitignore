@@ -2,8 +2,8 @@
 /yarn-error.log
 /index.js
 /index.d.ts
-/lib/**/*.js
-/lib/**/*.d.ts
+/lib/
+/test/
 
 /examples/node_modules/
 /examples/yarn.lock

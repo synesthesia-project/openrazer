@@ -29,7 +29,7 @@
   "scripts": {
     "clean": "gulp clean; yarn --cwd examples run clean",
     "build": "gulp; yarn --cwd examples run build",
-    "build-and-test": "gulp; yarn --cwd examples run test"
+    "test": "mocha test/**/*.js"
   },
   "files": [
     "index.js",
@@ -38,6 +38,8 @@
     "README.md"
   ],
   "dependencies": {
+    "@types/mocha": "^5.2.7",
+    "mocha": "^6.1.4",
     "svgson": "^3.1.0"
   }
 }
