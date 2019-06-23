@@ -2,17 +2,17 @@ type KeyboardPixelMapRow = {
   y?: number; // TODO
   keys: {
     i: number;
-    x?: number; // TODO
-    y?
   }[];
 };
 
 export type KeyboardPixelMap = {
+  svg: string;
   rows: KeyboardPixelMapRow[];
 };
 
 export const KEYBOARD_PIXEL_MAPS: { [id: string]: KeyboardPixelMap } = {
   'Razer Ornata Chroma': {
+    svg: 'ornata-chroma.svg',
     rows: [
       {
         keys: [
