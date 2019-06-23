@@ -85,7 +85,6 @@ export const KEYBOARD_PIXEL_MAPS: { [id: string]: KeyboardPixelMap } = {
         ]
       },
       {
-      // 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 18, 19, 20
         keys: [
           { i: 1  }, // caps lock
           { i: 2  }, // a
@@ -106,7 +105,6 @@ export const KEYBOARD_PIXEL_MAPS: { [id: string]: KeyboardPixelMap } = {
         ]
       },
       {
-      // 1, 3, 4, 5, 6, 7, 8, 9, 0, 11, 12, 14, 16, 18, 19, 20, 21 (enter)
         keys: [
           { i: 1  }, // shift
           { i: 3  }, // z
@@ -128,7 +126,6 @@ export const KEYBOARD_PIXEL_MAPS: { [id: string]: KeyboardPixelMap } = {
         ]
       },
       {
-      // 1, 2, 3, 7, 11, 12, 13, 14, 15, 16, 17, 19, 20
         keys: [
           { i: 1  }, // ctrl
           { i: 2  }, // windows
