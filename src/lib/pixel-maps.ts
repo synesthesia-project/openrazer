@@ -1,0 +1,150 @@
+type KeyboardPixelMapRow = {
+  y?: number; // TODO
+  keys: {
+    i: number;
+    x?: number; // TODO
+    y?
+  }[];
+};
+
+export type KeyboardPixelMap = {
+  rows: KeyboardPixelMapRow[];
+};
+
+export const KEYBOARD_PIXEL_MAPS: { [id: string]: KeyboardPixelMap } = {
+  'Razer Ornata Chroma': {
+    rows: [
+      {
+        keys: [
+          { i: 1  }, // ESC
+          { i: 3  }, // F1
+          { i: 4  }, // F2
+          { i: 5  }, // F3
+          { i: 6  }, // F4
+          { i: 7  }, // F5
+          { i: 8  }, // F6
+          { i: 9  }, // F7
+          { i: 10 }, // F8
+          { i: 11 }, // F9
+          { i: 12 }, // F10
+          { i: 13 }, // F11
+          { i: 14 }, // F12
+          { i: 15 }, // prt Sc
+          { i: 16 }, // scr lockk
+          { i: 17 }, // pause
+        ]
+      },
+      {
+        keys: [
+          { i: 1  }, // `
+          { i: 2  }, // 1
+          { i: 3  }, // 2
+          { i: 4  }, // 3
+          { i: 5  }, // 4
+          { i: 6  }, // 5
+          { i: 7  }, // 6
+          { i: 8  }, // 7
+          { i: 9  }, // 8
+          { i: 10 }, // 9
+          { i: 11 }, // 0
+          { i: 12 }, // -
+          { i: 13 }, // =
+          { i: 14 }, // backspace
+          { i: 15 }, // insert
+          { i: 16 }, // home
+          { i: 17 }, // page up
+          { i: 18 }, // num lock
+          { i: 19 }, // /
+          { i: 20 }, // *
+          { i: 21 }, // -
+        ]
+      },
+      {
+        keys: [
+          { i: 1  }, // tab
+          { i: 2  }, // q
+          { i: 3  }, // w
+          { i: 4  }, // e
+          { i: 5  }, // r
+          { i: 6  }, // t
+          { i: 7  }, // y
+          { i: 8  }, // u
+          { i: 9  }, // i
+          { i: 10 }, // o
+          { i: 11 }, // p
+          { i: 12 }, // [
+          { i: 13 }, // ]
+          { i: 14 }, // \
+          { i: 15 }, // delete
+          { i: 16 }, // end
+          { i: 17 }, // page down
+          { i: 18 }, // 7 / home
+          { i: 19 }, // 8 / up
+          { i: 20 }, // 9 / page up
+          { i: 21 }, // +
+        ]
+      },
+      {
+      // 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 18, 19, 20
+        keys: [
+          { i: 1  }, // caps lock
+          { i: 2  }, // a
+          { i: 3  }, // s
+          { i: 4  }, // d
+          { i: 5  }, // f
+          { i: 6  }, // g
+          { i: 7  }, // h
+          { i: 8  }, // j
+          { i: 9  }, // k
+          { i: 10 }, // l
+          { i: 11 }, // ;
+          { i: 12 }, // '
+          { i: 14 }, // enter
+          { i: 18 }, // 4 / left
+          { i: 19 }, // 5
+          { i: 20 }, // 6 / right
+        ]
+      },
+      {
+      // 1, 3, 4, 5, 6, 7, 8, 9, 0, 11, 12, 14, 16, 18, 19, 20, 21 (enter)
+        keys: [
+          { i: 1  }, // shift
+          { i: 3  }, // z
+          { i: 4  }, // x
+          { i: 5  }, // c
+          { i: 6  }, // v
+          { i: 7  }, // b
+          { i: 8  }, // n
+          { i: 9  }, // m
+          { i: 10 }, // ,
+          { i: 11 }, // .
+          { i: 12 }, // /
+          { i: 14 }, // shift
+          { i: 16 }, // up
+          { i: 18 }, // 1 / end
+          { i: 19 }, // 2 / down
+          { i: 20 }, // 3 / page down
+          { i: 21 }, // enter
+        ]
+      },
+      {
+      // 1, 2, 3, 7, 11, 12, 13, 14, 15, 16, 17, 19, 20
+        keys: [
+          { i: 1  }, // ctrl
+          { i: 2  }, // windows
+          { i: 3  }, // alt
+          { i: 7  }, // space
+          { i: 11 }, // alt
+          { i: 12 }, // fn
+          { i: 13 }, // menu
+          { i: 14 }, // ctrl
+          { i: 15 }, // left
+          { i: 16 }, // down
+          { i: 17 }, // right
+          { i: 19 }, // 0 / insert
+          { i: 20 }, // del
+        ]
+      }
+    ]
+  }
+};
