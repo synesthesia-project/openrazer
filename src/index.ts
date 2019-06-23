@@ -130,14 +130,14 @@ export class Keyboard {
   }
 
   /**
-   * Weire rows of colors to the custom frame buffer
+   * Display a custom frame on the keyboard
    *
    * @param rows An array of row objects. For each row specify index, start and colors.
    * @param row between 0-5, the row index
    * @param start between 0-21, the first column you want to write a color to
    * @param colors the colors you wish to write, providing no more than (22-start) values
    */
-  public writeCustomFrameRows(rows: {index: number, start: number, colors: RGB[]}[]) {
+  public async writeCustomFrame(rows: {index: number, start: number, colors: RGB[]}[]) {
     const bytes: number[] = [];
     rows.map(({ index, start, colors}) => {
       if (index < 0 || index > 5) throw new Error(`invalid row index: ${index}`);
@@ -147,14 +147,8 @@ export class Keyboard {
       bytes.push(index, start, end);
       for (const color of colors) bytes.push(...color);
     });
-    return this.writeBytes(matrix_custom_frame, bytes);
-  }
-
-  /**
-   * This command draws the current frame stored in the keyboards memory.
-   */
-  public writeCustomFrame() {
-    return this.writeBytes(matrix_effect_custom, [0x1]);
+    await this.writeBytes(matrix_custom_frame, bytes);
+    await this.writeBytes(matrix_effect_custom, [0x1]);
   }
 
   public setMatrixEffectNone() {
