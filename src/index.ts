@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import {promisify} from 'util';
 
-import { KeyboardPixelMap, getPixelMap } from './lib/pixelmaps';
+import { PixelMap, getPixelMap } from './lib/pixelmaps';
 
 const KEYBOARDS_PATH = '/sys/bus/hid/drivers/razerkbd/';
 const MOUSE_MATS_PATH = '/sys/bus/hid/drivers/razermousemat/';
@@ -90,7 +90,7 @@ class Device {
     return this.deviceType;
   }
 
-  public getPixelMap(): Promise<KeyboardPixelMap | null> {
+  public getPixelMap(): Promise<PixelMap | null> {
     return getPixelMap(this.deviceType);
   }
 
@@ -228,4 +228,8 @@ export class MouseMat extends Device {
 
 }
 
-export {KeyboardPixelMap};
+export {
+  PixelMap,
+  /** DEPRECATED */
+  PixelMap as KayboardPixelMap
+};

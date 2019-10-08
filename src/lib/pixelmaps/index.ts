@@ -3,7 +3,7 @@ import * as path from 'path';
 import svgson from 'svgson';
 import {promisify} from 'util';
 
-import { KEYBOARD_PIXEL_MAPS } from './data';
+import { KEYBOARD_PIXEL_MAPS, HARDCODED_MAPS } from './data';
 
 const readFile = promisify(fs.readFile);
 
@@ -16,23 +16,27 @@ export interface SVGKey {
   height: number;
 }
 
-export type KeyboardPixelMapKey = {
+export type PixelMapKey = {
   i: number;
   centreX: number;
   centreY: number;
-  svg: SVGKey;
+  svg?: SVGKey;
 };
 
-export type KeyboardPixelMapRow = {
-  keys: KeyboardPixelMapKey[];
+export type PixelMapRow = {
+  keys: PixelMapKey[];
 };
 
-export type KeyboardPixelMap = {
-  rows: KeyboardPixelMapRow[];
+export type PixelMap = {
+  rows: PixelMapRow[];
 };
 
 export async function getPixelMap(deviceType: string) {
   console.log('getPixelMap', deviceType);
+
+  const map = HARDCODED_MAPS[deviceType];
+  if (map) return map;
+
   const data = KEYBOARD_PIXEL_MAPS[deviceType];
   if (!data) return null;
 
@@ -67,7 +71,7 @@ export async function getPixelMap(deviceType: string) {
 
   // Map each key in KEYBOARD_PIXEL_MAPS to it's svg counterpart
   const rows = data.rows.map(row => {
-    const r: KeyboardPixelMapRow = {
+    const r: PixelMapRow = {
       keys: []
     };
 
@@ -89,7 +93,7 @@ export async function getPixelMap(deviceType: string) {
     return r;
   });
 
-  const result: KeyboardPixelMap = { rows };
+  const result: PixelMap = { rows };
   console.log(result);
   return result;
 }

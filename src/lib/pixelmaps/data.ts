@@ -1,3 +1,5 @@
+import { PixelMap } from './';
+
 type KeyboardPixelMapRow = {
   /**
    * The svg y positions for (most) keys in this row
@@ -152,5 +154,30 @@ export const KEYBOARD_PIXEL_MAPS: { [id: string]: KeyboardPixelMap } = {
         ]
       }
     ]
+  }
+};
+
+export const HARDCODED_MAPS: { [id: string]: PixelMap } = {
+  'Razer Firefly': {
+    rows: [{
+      // Height ~ 450, Width ~ 700
+      keys: [
+        { i: 0,  centreX: 700, centreY: 420 },
+        { i: 1,  centreX: 700, centreY: 400 },
+        { i: 2,  centreX: 700, centreY: 225 },
+        { i: 3,  centreX: 700, centreY: 100 },
+        { i: 4,  centreX: 650, centreY:  30 },
+        { i: 5,  centreX: 600, centreY:   0 },
+        { i: 6,  centreX: 480, centreY:   0 },
+        { i: 7,  centreX: 350, centreY:   0 },
+        { i: 8,  centreX: 220, centreY:   0 },
+        { i: 9,  centreX: 100, centreY:   0 },
+        { i: 10, centreX: 50,  centreY:  30 },
+        { i: 11, centreX:   0, centreY: 100 },
+        { i: 12, centreX:   0, centreY: 225 },
+        { i: 13, centreX:   0, centreY: 400 },
+        { i: 14, centreX:   0, centreY: 420 },
+      ]
+    }]
   }
 };
