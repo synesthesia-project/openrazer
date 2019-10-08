@@ -5,6 +5,7 @@ import {promisify} from 'util';
 import { KeyboardPixelMap, getPixelMap } from './lib/pixelmaps';
 
 const KEYBOARDS_PATH = '/sys/bus/hid/drivers/razerkbd/';
+const MOUSE_MATS_PATH = '/sys/bus/hid/drivers/razermousemat/';
 const ENCODING = 'utf8';
 
 const device_type = 'device_type';
@@ -45,19 +46,27 @@ function validateRGB(value: RGB) {
   }
 }
 
-export function getKeyboards(): Promise<Keyboard[]> {
-  const keyboards = readdir(KEYBOARDS_PATH).then(devices => Promise.all(
+export function getKeyboards() {
+  return getDevices(KEYBOARDS_PATH, Keyboard);
+}
+
+export function getMousemats() {
+  return getDevices(MOUSE_MATS_PATH, Device);
+}
+
+export function getDevices<T extends Device>(devicesFolder: string, cls: { new(devicePath: string, deviceType: string): T }): Promise<T[]> {
+  const keyboards = readdir(devicesFolder).then(devices => Promise.all(
     devices.map(async deviceId => {
       // Get Device Type
-      const devicePath = path.join(KEYBOARDS_PATH, deviceId);
+      const devicePath = path.join(devicesFolder, deviceId);
       const deviceType = await readFile(path.join(devicePath, device_type), ENCODING).catch(() => null);
-      return deviceType ? new Keyboard(devicePath, deviceType.trim()) : null;
+      return deviceType ? new cls(devicePath, deviceType.trim()) : null;
     })
   ));
   return keyboards.then(filterNonNull);
 }
 
-export class Keyboard {
+class Device {
 
   /**
    * The path to the device
@@ -100,6 +109,52 @@ export class Keyboard {
   }
 
   /**
+   * @param speed between 1 and 3, 1 = short, 3 = long
+   * @param color an RGB value
+   */
+  public setMatrixEffectReactive(speed: number, color: RGB) {
+    if (speed < 1 || speed > 3) throw new Error('invalid speed');
+    validateRGB(color);
+    return this.writeBytes(matrix_effect_reactive, [speed, ...color]);
+  }
+
+  public setMatrixEffectNone() {
+    return this.writeBytes(matrix_effect_none, [0x1]);
+  }
+
+  public setMatrixEffectSpectrum() {
+    return this.writeBytes(matrix_effect_spectrum, [0x1]);
+  }
+
+  public setMatrixEffectStatic(color: RGB) {
+    return this.writeBytes(matrix_effect_static, [...color]);
+  }
+
+  public setMatrixEffectWave(direction: 'left' | 'right') {
+    return this.writeBytes(matrix_effect_wave, [direction === 'left' ? 1 : 2]);
+  }
+
+  public setMatrixBrightness(brightness: number) {
+    validateByte(brightness, 'brightness');
+    return writeFile(path.join(this.devicePath, matrix_brightness), brightness.toString());
+  }
+
+  protected writeBytes(file: string, bytes: number[]) {
+    return writeFile(path.join(this.devicePath, file), Buffer.from(bytes));
+  }
+
+  public getSerialNumber() {
+    return readFile(path.join(this.devicePath, device_serial), ENCODING).then(s => s.trim());
+  }
+
+  public getFirmwareVersion() {
+    return readFile(path.join(this.devicePath, firmware_version), ENCODING).then(s => s.trim());
+  }
+}
+
+export class Keyboard extends Device {
+
+  /**
    * @param speed between 0 and 255, 0 = slow, 255 = fast
    * @param firstColor if set, use this colour in single-color mode
    * @param secondColor if set, use this colour in dual-color mode
@@ -120,16 +175,6 @@ export class Keyboard {
   }
 
   /**
-   * @param speed between 1 and 3, 1 = short, 3 = long
-   * @param color an RGB value
-   */
-  public setMatrixEffectReactive(speed: number, color: RGB) {
-    if (speed < 1 || speed > 3) throw new Error('invalid speed');
-    validateRGB(color);
-    return this.writeBytes(matrix_effect_reactive, [speed, ...color]);
-  }
-
-  /**
    * Display a custom frame on the keyboard
    *
    * @param rows An array of row objects. For each row specify index, start and colors.
@@ -137,9 +182,9 @@ export class Keyboard {
    * @param start between 0-21, the first column you want to write a color to
    * @param colors the colors you wish to write, providing no more than (22-start) values
    */
-  public async writeCustomFrame(rows: {index: number, start: number, colors: RGB[]}[]) {
+  public async writeCustomFrame(rows: { index: number, start: number, colors: RGB[] }[]) {
     const bytes: number[] = [];
-    rows.map(({ index, start, colors}) => {
+    rows.map(({ index, start, colors }) => {
       if (index < 0 || index > 5) throw new Error(`invalid row index: ${index}`);
       if (start < 0 || start > 21) throw new Error(`invalid start index: ${start}`);
       const end = start + colors.length - 1;
@@ -151,14 +196,6 @@ export class Keyboard {
     await this.writeBytes(matrix_effect_custom, [0x1]);
   }
 
-  public setMatrixEffectNone() {
-    return this.writeBytes(matrix_effect_none, [0x1]);
-  }
-
-  public setMatrixEffectSpectrum() {
-    return this.writeBytes(matrix_effect_spectrum, [0x1]);
-  }
-
   /**
    * This is only available for the Razer BlackWidow Ultimate 2013,
    * and for other non-Chroma/non-Ultimate devices.
@@ -168,30 +205,6 @@ export class Keyboard {
     return this.writeBytes(matrix_effect_pulsate, [0x1]);
   }
 
-  public setMatrixEffectStatic(color: RGB) {
-    return this.writeBytes(matrix_effect_static, [...color]);
-  }
-
-  public setMatrixEffectWave(direction: 'left' | 'right') {
-    return this.writeBytes(matrix_effect_wave, [direction === 'left' ? 1 : 2]);
-  }
-
-  public setMatrixBrightness(brightness: number) {
-    validateByte(brightness, 'brightness');
-    return writeFile(path.join(this.devicePath, matrix_brightness), brightness.toString());
-  }
-
-  private writeBytes(file: string, bytes: number[]) {
-    return writeFile(path.join(this.devicePath, file), Buffer.from(bytes));
-  }
-
-  public getSerialNumber() {
-    return readFile(path.join(this.devicePath, device_serial), ENCODING).then(s => s.trim());
-  }
-
-  public getFirmwareVersion() {
-    return readFile(path.join(this.devicePath, firmware_version), ENCODING).then(s => s.trim());
-  }
 }
 
 export {KeyboardPixelMap};
