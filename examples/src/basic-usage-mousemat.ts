@@ -14,6 +14,17 @@ const wait = (millis: number) => new Promise(resolve => setTimeout(resolve, mill
   console.log('firmware:', await device.getFirmwareVersion());
 
   console.log('Setting to spectrum');
+  device.writeCustomFrame(0, [
+    [255, 0, 0], [0, 255, 0], [0, 0, 255],
+    [255, 0, 0], [0, 255, 0], [0, 0, 255],
+    [255, 0, 0], [0, 255, 0], [0, 0, 255],
+    [255, 0, 0], [0, 255, 0], [0, 0, 255],
+    [255, 0, 0], [0, 255, 0], [0, 0, 255],
+  ]);
+
+  await wait(5000);
+
+  console.log('Setting to spectrum');
   device.setMatrixEffectSpectrum();
 
   await wait(5000);

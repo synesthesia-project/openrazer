@@ -51,7 +51,7 @@ export function getKeyboards() {
 }
 
 export function getMousemats() {
-  return getDevices(MOUSE_MATS_PATH, Device);
+  return getDevices(MOUSE_MATS_PATH, MouseMat);
 }
 
 export function getDevices<T extends Device>(devicesFolder: string, cls: { new(devicePath: string, deviceType: string): T }): Promise<T[]> {
@@ -203,6 +203,27 @@ export class Keyboard extends Device {
    */
   public setMatrixEffectPulsate() {
     return this.writeBytes(matrix_effect_pulsate, [0x1]);
+  }
+
+}
+
+export class MouseMat extends Device {
+
+  /**
+   * Display a custom frame on the mousemat
+   *
+   * @param start between 0-14, the first pixel you want to write a color to
+   * @param colors the colors you wish to write, providing no more than (15-start) values
+   */
+  public async writeCustomFrame(start: number, colors: RGB[]) {
+    if (start < 0 || start > 14) throw new Error(`invalid start index: ${start}`);
+    const bytes: number[] = [];
+    const end = start + colors.length - 1;
+    if (end > 14) throw new Error('too many colors provided');
+    bytes.push(0, start, end);
+    for (const color of colors) bytes.push(...color);
+    await this.writeBytes(matrix_custom_frame, bytes);
+    await this.writeBytes(matrix_effect_custom, [0x1]);
   }
 
 }
