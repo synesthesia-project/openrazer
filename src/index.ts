@@ -230,6 +230,4 @@ export class MouseMat extends Device {
 
 export {
   PixelMap,
-  /** DEPRECATED */
-  PixelMap as KayboardPixelMap
 };
