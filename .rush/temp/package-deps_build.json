@@ -1,0 +1,4 @@
+{
+  "files": {},
+  "arguments": "gulp; yarn --cwd examples run build "
+}
